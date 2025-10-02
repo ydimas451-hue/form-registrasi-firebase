@@ -12,7 +12,7 @@
     <header class="bg-primary text-white py-4 mb-4">
         <div class="container text-center">
             <h1 class="fs-4">REGISTRASI MERBABU VIA WEKAS</h1>
-            <p class="mb-0">Open Trip GEMPAL !!!</p>
+            <p class="mb-0">OPEN TRIP GEMPAL !!!</p>
         </div>
     </header>
 
@@ -39,7 +39,7 @@
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="lampiran_ktp" class="form-label required">Lampiran Identitas KTP / Kartu Pelajar</label>
+                            <label for="lampiran_ktp" class="form-label required">Identitas KTP / Kartu Pelajar</label>
                             <input type="file" class="form-control" id="lampiran_ktp" name="lampiran_ktp" accept=".jpg,.png" required>
                             <div class="form-text">Silahkan lampirkan file gambar berformat .jpg / .png</div>
                             <div class="invalid-feedback">Lampiran identitas diperlukan.</div>
@@ -201,29 +201,19 @@
         // =======================================================================
         // B. FIREBASE CONFIGURATIONS & SUBMIT HANDLER
         // =======================================================================
-
-        // Import the functions you need from the SDKs you need
-            import { initializeApp } from "firebase/app";
-            import { getAnalytics } from "firebase/analytics";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-            const firebaseConfig = {
+        // **PERBAIKAN:** Menghapus sintaks 'import' yang menyebabkan error.
+        
+        const firebaseConfig = {
             apiKey: "AIzaSyBuDwtZP6hMWb1vzqztbVanRjTUQwJ7pxA",
             authDomain: "form-registrasi-89e90.firebaseapp.com",
             projectId: "form-registrasi-89e90",
             storageBucket: "form-registrasi-89e90.firebasestorage.app",
             messagingSenderId: "485535332255",
             appId: "1:485535332255:web:8f4c3b02733b5f0568efaa",
-            measurementId: "G-20990GF34K"
-};
+            // measurementId: "G-20990GF34K" // Tidak diperlukan untuk inisialisasi dasar V8
+        };
 
-        // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-
+        // Inisialisasi Firebase V8
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const storage = firebase.storage();
@@ -232,8 +222,6 @@
             const form = document.querySelector('form');
             const lampiranKtpInput = document.getElementById('lampiran_ktp');
             const submitButton = document.querySelector('.submit-btn');
-            
-            // Hapus listener untuk perbandingan password karena field sudah dihapus.
 
             form.addEventListener('submit', async function(event) {
                 event.preventDefault(); 
@@ -268,7 +256,8 @@
                     const getSelectedText = (id) => document.getElementById(id).options[document.getElementById(id).selectedIndex].textContent;
 
                     const formData = {
-                        kewarganegaraan: document.getElementById('kewarganengaraan').value,
+                        // **PERBAIKAN:** Mengoreksi typo pada ID 'kewarganegaraan'
+                        kewarganegaraan: document.getElementById('kewarganegaraan').value, 
                         jenis_identitas: document.getElementById('jenis_identitas').value,
                         nomor_ktp: document.getElementById('nomor_ktp').value,
                         nama_lengkap: document.getElementById('nama_lengkap').value,
@@ -280,16 +269,13 @@
                         berat_badan: document.getElementById('berat_badan').value,
                         tinggi_badan: document.getElementById('tinggi_badan').value,
                         
-                        // Data alamat (mengambil nama/teks, bukan ID)
+                        // Data alamat
                         provinsi: getSelectedText('provinsi'),
                         kota: getSelectedText('kota'),
                         kecamatan: getSelectedText('kecamatan'),
                         kelurahan: getSelectedText('kelurahan'),
 
                         alamat_lengkap: document.getElementById('alamat').value,
-                        
-                        // Hapus field username, password dari formData
-                        // username: document.getElementById('username').value, 
                         
                         // URL Foto dari Storage
                         url_lampiran_ktp: downloadURL, 
@@ -314,8 +300,9 @@
         });
 
         // =======================================================================
-        // C. DINAMIKA DROPDOWN ALAMAT (API Panggilan) - (Kode ini sama seperti sebelumnya)
+        // C. DINAMIKA DROPDOWN ALAMAT (API Panggilan)
         // =======================================================================
+        // (Kode ini tidak ada perubahan fungsional karena sudah benar)
 
         const selectProvinsi = document.getElementById('provinsi');
         const selectKota = document.getElementById('kota');
