@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Akun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+
+    <header class="bg-primary text-white py-4 mb-4">
+        <div class="container text-center">
+            <h1 class="fs-4">REGISTRASI MERBABU VIA WEKAS</h1>
+            <p class="mb-0">Open Trip GEMPAL !!!</p>
+        </div>
+    </header>
+
+    <div class="container my-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
+                <form action="#" method="POST" class="needs-validation" novalidate>
+
+                    <div class="mb-4">
+                        <label for="kewarganegaraan" class="form-label required">Jenis Kewarganegaraan</label>
+                        <select class="form-select" id="kewarganegaraan" name="kewarganegaraan" required>
+                            <option value="WNI" selected>WNI</option>
+                            <option value="WNA">WNA</option>
+                        </select>
+                        <div class="invalid-feedback">Pilih jenis kewarganegaraan Anda.</div>
+                    </div>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-4">
+                            <label for="jenis_identitas" class="form-label required">Jenis Identitas</label>
+                            <select class="form-select" id="jenis_identitas" name="jenis_identitas" required>
+                                <option value="KTP" selected>KTP</option>
+                                <option value="Kartu Pelajar">Kartu Pelajar</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="lampiran_ktp" class="form-label required">Lampiran Identitas KTP</label>
+                            <input type="file" class="form-control" id="lampiran_ktp" name="lampiran_ktp" accept=".jpg,.png" required>
+                            <div class="form-text">Silahkan lampirkan file gambar berformat .jpg / .png</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nomor_ktp" class="form-label required">Nomor KTP</label>
+                            <input type="text" class="form-control" id="nomor_ktp" name="nomor_ktp" required pattern="\d{16}" placeholder="Masukkan 16 digit Nomor KTP">
+                            <div class="invalid-feedback">Nomor KTP harus 16 digit angka.</div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-6">
+                            <label for="nama_lengkap" class="form-label required">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="tanggal_lahir" class="form-label required">Tanggal Lahir</label>
+                            <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-4">
+                            <label for="no_telepon" class="form-label required">No. Telepon</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Indonesia (+62)</span>
+                                <input type="tel" class="form-control" id="no_telepon" name="no_telepon" placeholder="Misal: 0812xxx / +62xxx" required>
+                            </div>
+                            <div class="form-text">Isikan No. Telepon yang terkoneksi dengan WhatsApp</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="no_darurat" class="form-label required">No. Telepon Darurat</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Indonesia (+62)</span>
+                                <input type="tel" class="form-control" id="no_darurat" name="no_darurat" placeholder="Misal: 0812xxx / +62xxx" required>
+                            </div>
+                            <div class="form-text">*Silahkan diisi dengan No. Telepon Orang Tua / Kerabat</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="email" class="form-label required">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="contoh@domain.com">
+                            <div class="form-text">Pastikan Email Anda Valid</div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-4">
+                            <label for="jenis_kelamin" class="form-label required">Jenis Kelamin</label>
+                            <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
+                                <option value="Laki-laki" selected>Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="berat_badan" class="form-label required">Berat Badan (kg)</label>
+                            <input type="number" class="form-control" id="berat_badan" name="berat_badan" min="1" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="tinggi_badan" class="form-label required">Tinggi Badan (cm)</label>
+                            <input type="number" class="form-control" id="tinggi_badan" name="tinggi_badan" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-6">
+                            <label for="provinsi" class="form-label required">Provinsi (Sesuai KTP)</label>
+                            <select class="form-select" id="provinsi" name="provinsi" required>
+                                <option value="" selected disabled>Pilih Provinsi</option>
+                                </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="kota" class="form-label required">Kota/Kabupaten (Sesuai KTP)</label>
+                            <select class="form-select" id="kota" name="kota" required>
+                                <option value="" selected disabled>Pilih Kota/Kabupaten</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-6">
+                            <label for="kecamatan" class="form-label required">Kecamatan (Sesuai KTP)</label>
+                            <select class="form-select" id="kecamatan" name="kecamatan" required>
+                                <option value="" selected disabled>Pilih Kecamatan</option>
+                                </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="kelurahan" class="form-label required">Kelurahan (Sesuai KTP)</label>
+                            <select class="form-select" id="kelurahan" name="kelurahan" required>
+                                <option value="" selected disabled>Pilih Kelurahan</option>
+                                </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="alamat" class="form-label required">Alamat</label>
+                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
+                        <div class="form-text">Isikan alamat sesuai dengan alamat pada KTP</div>
+                    </div>
+
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-4">
+                            <label for="username" class="form-label required">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="password" class="form-label required">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="retype_password" class="form-label required">Ketik Ulang Password</label>
+                            <input type="password" class="form-control" id="retype_password" name="retype_password" required>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34-.34.659-.58.88-.22.219-.47.38-.66.52A1 1 1 0 0 0 7 13h2a1 1 0 0 0 1-1V7.276a1.114 1.114 0 0 0-.256-.442c-.226-.25-.39-.425-.56-.605a.735.735 0 0 1-.22-.321c-.08-.25-.08-.49-.03-.708A.5.5 0 0 1 8 5a.5.5 0 0 1 .4.244z"/>
+                        </svg>
+                        <div>
+                            Verifikasi pendaftaran akun akan ditutup pada Tanggal 20 Oktober 2025.
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-md-4 mx-auto">
+                        <button class="btn btn-warning submit-btn" type="submit">
+                             SUBMIT
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Contoh validasi form kustom Bootstrap
+        (() => {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+    // 1. GANTI DENGAN KONFIGURASI PROYEK FIREBASE ANDA
+    const firebaseConfig = {
+        apiKey: "AIzaSyBuDwtZP6hMWb1vzqztbVanRjTUQwJ7pxA",
+        authDomain: "form-registrasi-89e90.firebaseapp.com",
+        projectId: "form-registrasi-89e90",
+        storageBucket: "form-registrasi-89e90.firebasestorage.app",
+        messagingSenderId: "485535332255",
+        appId: "1:485535332255:web:8f4c3b02733b5f0568efaa"
+    };
+
+    // Inisialisasi Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // 2. TANGANI SUBMIT FORM
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah form submit standar (reload halaman)
+            
+            // Lakukan validasi dasar sebelum mengirim data
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            // Ambil semua data dari field form
+            const formData = {
+                kewarganegaraan: document.getElementById('kewarganegaraan').value,
+                jenis_identitas: document.getElementById('jenis_identitas').value,
+                nomor_ktp: document.getElementById('nomor_ktp').value,
+                nama_lengkap: document.getElementById('nama_lengkap').value,
+                tanggal_lahir: document.getElementById('tanggal_lahir').value,
+                no_telepon: document.getElementById('no_telepon').value,
+                email: document.getElementById('email').value,
+                alamat: document.getElementById('alamat').value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() // Catat waktu submit
+            };
+
+            // 3. SIMPAN DATA KE FIRESTORE DATABASE
+            db.collection("pendaftar").add(formData)
+                .then((docRef) => {
+                    alert("✅ Registrasi Berhasil! Data Anda telah tersimpan. ID Dokumen: " + docRef.id);
+                    form.reset(); // Kosongkan form setelah sukses
+                    form.classList.remove('was-validated');
+                })
+                .catch((error) => {
+                    console.error("Error saat menyimpan data: ", error);
+                    alert("❌ Registrasi Gagal. Silakan coba lagi.");
+                });
+        });
+    });
+</script>
+</body>
+</html>

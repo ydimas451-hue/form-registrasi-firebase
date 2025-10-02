@@ -1,0 +1,42 @@
+<div id="data-result">
+    <h2>Data Pendaftar Tersimpan</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Nama</th><th>Email</th><th>No. Telp</th></tr>
+        </thead>
+        <tbody id="data-tbody">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // ... (Inisialisasi Firebase seperti di index.html) ...
+
+    function loadData() {
+        const tbody = document.getElementById('data-tbody');
+        tbody.innerHTML = '<tr><td colspan="3">Memuat data...</td></tr>';
+
+        db.collection("pendaftar").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+            tbody.innerHTML = ''; // Hapus pesan 'Memuat data...'
+            if (querySnapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="3">Belum ada data pendaftar.</td></tr>';
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const row = tbody.insertRow();
+                
+                row.insertCell().textContent = data.nama_lengkap;
+                row.insertCell().textContent = data.email;
+                row.insertCell().textContent = data.no_telepon;
+            });
+        }).catch((error) => {
+            console.error("Error saat mengambil dokumen: ", error);
+            tbody.innerHTML = '<tr><td colspan="3">Gagal memuat data.</td></tr>';
+        });
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    loadData();
+</script>
