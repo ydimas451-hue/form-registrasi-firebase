@@ -19,7 +19,7 @@
     <div class="container my-5">
         <div class="card shadow-lg border-0">
             <div class="card-body p-4 p-md-5">
-                <form action="#" method="POST" class="needs-validation" novalidate>
+                <form id="registrationForm" class="needs-validation" novalidate>
 
                     <div class="mb-4">
                         <label for="kewarganegaraan" class="form-label required">Jenis Kewarganegaraan</label>
@@ -40,13 +40,13 @@
                         </div>
                         <div class="col-md-4">
                             <label for="lampiran_ktp" class="form-label required">Identitas KTP / Kartu Pelajar</label>
-                            <input type="file" class="form-control" id="lampiran_ktp" name="lampiran_ktp" accept=".jpg,.png" required>
+                            <input type="file" class="form-control" id="lampiran_ktp" name="lampiran_ktp" accept=".jpg,.png,.jpeg" required>
                             <div class="form-text">Silahkan lampirkan file gambar berformat .jpg / .png</div>
                             <div class="invalid-feedback">Lampiran identitas diperlukan.</div>
                         </div>
                         <div class="col-md-4">
                             <label for="nomor_ktp" class="form-label required">Nomor KTP / Kartu Pelajar</label>
-                            <input type="text" class="form-control" id="nomor_ktp" name="nomor_ktp" required pattern="\d{16}" placeholder="Masukkan 16 digit Nomor KTP">
+                            <input type="text" class="form-control" id="nomor_ktp" name="nomor_ktp" required pattern="\d{16}" placeholder="Masukkan 16 digit Nomor KTP / Nomor Kartu Pelajar">
                             <div class="invalid-feedback">Nomor KTP harus 16 digit angka.</div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                             <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34-.34.659-.58.88-.22.219-.47.38-.66.52A1 1 0 0 0 7 13h2a1 1 0 0 0 1-1V7.276a1.114 1.114 0 0 0-.256-.442c-.226-.25-.39-.425-.56-.605a.735.735 0 0 1-.22-.321c-.08-.25-.08-.49-.03-.708A.5.5 0 0 1 8 5a.5.5 0 0 1 .4.244z"/>
                         </svg>
                         <div>
-                            Verifikasi pendaftaran akun akan ditutup pada Tanggal 20 Oktober 2025.
+                            Data yang Anda input menjadi TANGGUNG JAWAB Anda Sendiri dan Untuk Verifikasi pendaftaran akun akan ditutup pada Tanggal 20 Oktober 2025.
                         </div>
                     </div>
 
@@ -177,91 +177,121 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-
     <script>
         // =======================================================================
-        // A. VALIDASI BOOTSTRAP
+        // A. VALIDASI BOOTSTRAP (TETAP SAMA)
         // =======================================================================
         (() => {
             'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
+            const form = document.getElementById('registrationForm');
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false);
         })()
 
 
         // =======================================================================
-        // B. FIREBASE CONFIGURATIONS & SUBMIT HANDLER
+        // B. FIREBASE & CLOUDINARY CONFIGURATIONS & SUBMIT HANDLER (HYBRID)
         // =======================================================================
-        // **PERBAIKAN:** Menghapus sintaks 'import' yang menyebabkan error.
-        
+
+        // --- KONFIGURASI FIREBASE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyBuDwtZP6hMWb1vzqztbVanRjTUQwJ7pxA",
+            apiKey: "AIzaSyBuDwtZP6hMWb1vzqztbVanRjTUQwJ7pxA", // GANTI DENGAN KUNCI ANDA
             authDomain: "form-registrasi-89e90.firebaseapp.com",
             projectId: "form-registrasi-89e90",
-            storageBucket: "form-registrasi-89e90.firebasestorage.app",
-            messagingSenderId: "485535332255",
-            appId: "1:485535332255:web:8f4c3b02733b5f0568efaa",
-            // measurementId: "G-20990GF34K" // Tidak diperlukan untuk inisialisasi dasar V8
+            // Tambahkan properti lain yang diperlukan
         };
+
+        // --- KONFIGURASI CLOUDINARY (GANTI INI!) ---
+        const CLOUDINARY_CLOUD_NAME = "dtigcegtl"; 
+        const CLOUDINARY_UPLOAD_PRESET = "merbabu_unsigned"; 
 
         // Inisialisasi Firebase V8
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const storage = firebase.storage();
 
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.querySelector('form');
+            const form = document.getElementById('registrationForm');
             const lampiranKtpInput = document.getElementById('lampiran_ktp');
             const submitButton = document.querySelector('.submit-btn');
 
+            // Fungsi helper untuk mendapatkan teks dari dropdown yang dipilih
+            const getSelectedText = (id) => {
+                const selectElement = document.getElementById(id);
+                // Menghindari error jika dropdown belum dipilih/diisi
+                if (selectElement && selectElement.selectedIndex !== -1) {
+                    return selectElement.options[selectElement.selectedIndex].textContent;
+                }
+                return ''; 
+            };
+            
+            // -----------------------------------------------------------------------
+            // FUNGSI UPLOAD KE CLOUDINARY
+            // -----------------------------------------------------------------------
+            async function uploadToCloudinary(file) {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                formData.append('folder', 'merbabu_registrasi'); // Opsional: Untuk pengorganisasian
+
+                const cloudinaryURL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/upload`;
+
+                const response = await fetch(cloudinaryURL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Cloudinary Upload Gagal: ${errorData.error.message || response.statusText}`);
+                }
+
+                const data = await response.json();
+                // Mengembalikan public_id Cloudinary yang akan disimpan di Firestore
+                return data.public_id; 
+            }
+
+
+            // -----------------------------------------------------------------------
+            // SUBMIT HANDLER BARU
+            // -----------------------------------------------------------------------
             form.addEventListener('submit', async function(event) {
+                // Mencegah submit default lagi (diulang karena validasi Bootstrap di atas)
                 event.preventDefault(); 
                 
+                // Cek validasi ulang, walaupun sudah dilakukan oleh Bootstrap
                 if (!form.checkValidity()) {
-                    event.stopPropagation();
-                    form.classList.add('was-validated');
                     return;
                 }
 
                 submitButton.disabled = true;
-                submitButton.textContent = 'Memproses & Mengunggah File...';
+                submitButton.textContent = 'Memproses & Mengunggah File...'; 
 
                 try {
                     const ktpFile = lampiranKtpInput.files[0];
 
                     if (!ktpFile) {
-                        alert("Mohon lampirkan file identitas.");
-                        return; 
+                        throw new Error("Mohon lampirkan file identitas (KTP/Kartu Pelajar).");
                     }
 
-                    // --- UPLOAD KE FIREBASE STORAGE ---
-                    const timestamp = new Date().getTime();
-                    const fileName = `lampiran_identitas/${timestamp}_${ktpFile.name}`; 
-                    const storageRef = storage.ref(fileName);
+                    // --- LANGKAH 1: UPLOAD KE CLOUDINARY ---
+                    const cloudinaryId = await uploadToCloudinary(ktpFile);
+                    submitButton.textContent = 'File Berhasil Diunggah. Menyimpan Data...';
 
-                    const uploadTask = storageRef.put(ktpFile);
-                    const snapshot = await uploadTask;
-                    const downloadURL = await snapshot.ref.getDownloadURL();
-                    
-                    // --- SIMPAN DATA TEKS KE FIRESTORE ---
-                    const getSelectedText = (id) => document.getElementById(id).options[document.getElementById(id).selectedIndex].textContent;
-
+                    // --- LANGKAH 2: SIMPAN DATA TEKS KE FIRESTORE ---
                     const formData = {
-                        // **PERBAIKAN:** Mengoreksi typo pada ID 'kewarganegaraan'
-                        kewarganegaraan: document.getElementById('kewarganegaraan').value, 
+                        // Data Kredensial & Identitas
+                        kewarganegaraan: document.getElementById('kewarganegaraan').value,
                         jenis_identitas: document.getElementById('jenis_identitas').value,
                         nomor_ktp: document.getElementById('nomor_ktp').value,
                         nama_lengkap: document.getElementById('nama_lengkap').value,
                         tanggal_lahir: document.getElementById('tanggal_lahir').value,
+                        
+                        // Data Kontak & Fisik
                         no_telepon: document.getElementById('no_telepon').value,
                         no_darurat: document.getElementById('no_darurat').value,
                         email: document.getElementById('email').value,
@@ -269,16 +299,15 @@
                         berat_badan: document.getElementById('berat_badan').value,
                         tinggi_badan: document.getElementById('tinggi_badan').value,
                         
-                        // Data alamat
+                        // Data Alamat (Menggunakan Teks yang Dipilih dari Dropdown)
                         provinsi: getSelectedText('provinsi'),
                         kota: getSelectedText('kota'),
                         kecamatan: getSelectedText('kecamatan'),
                         kelurahan: getSelectedText('kelurahan'),
-
                         alamat_lengkap: document.getElementById('alamat').value,
                         
-                        // URL Foto dari Storage
-                        url_lampiran_ktp: downloadURL, 
+                        // LINK FOTO: Hanya simpan Public ID dari Cloudinary
+                        cloudinary_public_id: cloudinaryId, 
                         
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     };
@@ -288,9 +317,11 @@
                     alert("✅ Registrasi Berhasil! Data Anda dan lampiran telah tersimpan.");
                     form.reset(); 
                     form.classList.remove('was-validated');
-                    resetNextDropdowns('kelurahan');
+                    // Panggil fungsi resetNextDropdowns (dari bagian C)
+                    resetNextDropdowns('kelurahan'); 
+
                 } catch (error) {
-                    console.error("Error saat menyimpan data: ", error);
+                    console.error("Error saat submit: ", error);
                     alert("❌ Registrasi Gagal. Error: " + error.message);
                 } finally {
                     submitButton.disabled = false;
@@ -299,10 +330,10 @@
             });
         });
 
+
         // =======================================================================
-        // C. DINAMIKA DROPDOWN ALAMAT (API Panggilan)
+        // C. DINAMIKA DROPDOWN ALAMAT (API Panggilan - TIDAK BERUBAH)
         // =======================================================================
-        // (Kode ini tidak ada perubahan fungsional karena sudah benar)
 
         const selectProvinsi = document.getElementById('provinsi');
         const selectKota = document.getElementById('kota');
